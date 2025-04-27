@@ -17,7 +17,7 @@ function preload() {
 }
 
 function create() {
-  this.add.text(300, 250, "Detective Game!", {
+  this.add.text(300, 250, "Operation Red Flag", {
     font: "32px Arial",
     fill: "#ffffff",
   });
