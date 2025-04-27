@@ -160,6 +160,24 @@ class CommentSectionChaos extends Phaser.Scene {
     // Later: Load assets
   }
 
+  selectFlag(flagType) {
+    this.selectedFlag = flagType;
+    console.log("Selected flag:", flagType);
+
+    // Optionally: highlight the selected flag
+    this.trollFlag.setBackgroundColor("#333333");
+    this.botFlag.setBackgroundColor("#333333");
+    this.dogWhistleFlag.setBackgroundColor("#333333");
+
+    if (flagType === "troll") {
+      this.trollFlag.setBackgroundColor("#5555ff"); // Highlight
+    } else if (flagType === "bot") {
+      this.botFlag.setBackgroundColor("#5555ff");
+    } else if (flagType === "dogwhistle") {
+      this.dogWhistleFlag.setBackgroundColor("#5555ff");
+    }
+  }
+
   create() {
     this.cameras.main.setBackgroundColor("#1e1e1e");
 
@@ -262,6 +280,60 @@ class CommentSectionChaos extends Phaser.Scene {
 
       // Increase Y for next comment
       commentY += 70; // Space out the comments nicely
+
+      // Red Flags UI
+      this.selectedFlag = null; // Track what the player has selected
+
+      this.add.text(620, 150, "Red Flags:", {
+        fontSize: "20px",
+        color: "#ffffff",
+        fontFamily: "Arial",
+      });
+
+      // Troll Flag
+      this.trollFlag = this.add
+        .text(620, 190, "👺 Troll", {
+          fontSize: "18px",
+          color: "#ff4444",
+          fontFamily: "Arial",
+          backgroundColor: "#333333",
+          padding: { x: 5, y: 3 },
+        })
+        .setInteractive();
+
+      this.trollFlag.on("pointerdown", () => {
+        this.selectFlag("troll");
+      });
+
+      // Bot Flag
+      this.botFlag = this.add
+        .text(620, 240, "🤖 Bot", {
+          fontSize: "18px",
+          color: "#44ff44",
+          fontFamily: "Arial",
+          backgroundColor: "#333333",
+          padding: { x: 5, y: 3 },
+        })
+        .setInteractive();
+
+      this.botFlag.on("pointerdown", () => {
+        this.selectFlag("bot");
+      });
+
+      // Dog Whistle Flag
+      this.dogWhistleFlag = this.add
+        .text(620, 290, "🐶 Dog Whistle", {
+          fontSize: "18px",
+          color: "#ffff44",
+          fontFamily: "Arial",
+          backgroundColor: "#333333",
+          padding: { x: 5, y: 3 },
+        })
+        .setInteractive();
+
+      this.dogWhistleFlag.on("pointerdown", () => {
+        this.selectFlag("dogwhistle");
+      });
     });
   }
 }
