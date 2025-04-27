@@ -129,6 +129,31 @@ class CommentSectionChaos extends Phaser.Scene {
       "Detective: Misidentifying good commenters will set us back. Be careful!",
       "Detective: Good luck, agent.",
     ];
+    this.commentData = [
+      {
+        username: "PatriotEagle99",
+        content:
+          "Why even bother listening to them? They're all corrupt anyway.",
+        type: "troll",
+      },
+      {
+        username: "FreedomBot2025",
+        content:
+          "Amazing! Check out this new political page! 👉 [suspicious link]",
+        type: "bot",
+      },
+      {
+        username: "LibertyCrier",
+        content:
+          "Some people just don't value 'traditional values' anymore... sad.",
+        type: "dogwhistle",
+      },
+      {
+        username: "SunnyDays",
+        content: "Hope everyone is staying safe and kind out there! ❤️",
+        type: "normal",
+      },
+    ];
   }
 
   preload() {
@@ -180,14 +205,64 @@ class CommentSectionChaos extends Phaser.Scene {
   }
 
   setupGameUI() {
+    // Progress Bar Placeholder (for later)
+    this.progressBar = this.add.rectangle(400, 20, 600, 20, 0x00ff00);
+
+    // Title of the Post (centered)
     this.add
-      .text(400, 300, "Gameplay Starting...", {
-        fontSize: "32px",
+      .text(400, 60, "🚨 Breaking News 🚨", {
+        fontSize: "24px",
         color: "#ffffff",
+        fontFamily: "Arial",
       })
       .setOrigin(0.5);
 
-    // Later: set up comment section, flags, spawning comments, progress bar, etc.
+    // Placeholder Post Content
+    this.add
+      .text(400, 100, "An important event has everyone talking...", {
+        fontSize: "16px",
+        color: "#cccccc",
+        fontFamily: "Arial",
+      })
+      .setOrigin(0.5);
+
+    // Comment Section Title
+    this.add
+      .text(100, 150, "Comments:", {
+        fontSize: "20px",
+        color: "#ffffff",
+        fontFamily: "Arial",
+      })
+      .setOrigin(0, 0);
+
+    // Group to hold all comments
+    this.commentsGroup = this.add.group();
+
+    // Vertical spacing
+    let commentY = 180; // Start position under the "Comments:" title
+
+    // Loop through comment data and spawn comments
+    this.commentData.forEach((comment) => {
+      const usernameText = this.add.text(100, commentY, comment.username, {
+        fontSize: "16px",
+        color: "#00bfff",
+        fontFamily: "Arial",
+        fontStyle: "bold",
+      });
+
+      const contentText = this.add.text(120, commentY + 20, comment.content, {
+        fontSize: "14px",
+        color: "#ffffff",
+        fontFamily: "Arial",
+        wordWrap: { width: 550 },
+      });
+
+      this.commentsGroup.add(usernameText);
+      this.commentsGroup.add(contentText);
+
+      // Increase Y for next comment
+      commentY += 70; // Space out the comments nicely
+    });
   }
 }
 
