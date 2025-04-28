@@ -9,6 +9,7 @@ class MainMenu extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor("#24252A");
 
+    // Title Text
     this.add
       .text(400, 150, "Operation Red Flag", {
         fontSize: "48px",
@@ -17,6 +18,7 @@ class MainMenu extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
+    // Start Mission Button
     const startButton = this.add
       .text(400, 300, "Start Mission", {
         fontSize: "32px",
@@ -33,6 +35,7 @@ class MainMenu extends Phaser.Scene {
       .on("pointerout", () => startButton.setColor("#00ff00"))
       .on("pointerdown", () => this.scene.start("CommentSectionChaos"));
 
+    // Instructions Button
     const instructionsButton = this.add
       .text(400, 400, "Instructions", {
         fontSize: "24px",
@@ -60,6 +63,7 @@ class CommentSectionChaos extends Phaser.Scene {
   }
 
   preload() {
+    // Comment Pool: Expanded to ~30 comments
     this.commentPool = [
       {
         username: "PatriotEagle99",
@@ -144,6 +148,71 @@ class CommentSectionChaos extends Phaser.Scene {
         content: "Sending love and kindness to all! ❤️",
         type: "normal",
       },
+      {
+        username: "JusticeWatch",
+        content: "They're trying to silence us!",
+        type: "troll",
+      },
+      {
+        username: "SpammySam",
+        content: "FREE gift cards! Comment NOW!",
+        type: "bot",
+      },
+      {
+        username: "SignalCaller",
+        content: "They aren't *real* citizens anyway...",
+        type: "dogwhistle",
+      },
+      {
+        username: "PeaceBringer",
+        content: "Let's build bridges, not walls. ✨",
+        type: "normal",
+      },
+      {
+        username: "AngryVoice",
+        content: "They don't deserve rights.",
+        type: "dogwhistle",
+      },
+      {
+        username: "SuperSaleBot",
+        content: "50% off luxury watches! ⌚",
+        type: "bot",
+      },
+      {
+        username: "HopeDealer",
+        content: "Kindness is contagious. ❤️",
+        type: "normal",
+      },
+      {
+        username: "AltNewsNow",
+        content: "You won't hear THIS on the mainstream news!",
+        type: "troll",
+      },
+      {
+        username: "CouponKing",
+        content: "Get your discounts today! 🎟️",
+        type: "bot",
+      },
+      {
+        username: "HiddenAgenda",
+        content: "The government is hiding everything from us!",
+        type: "troll",
+      },
+      {
+        username: "BridgeBuilder",
+        content: "Together we are stronger. 🤝",
+        type: "normal",
+      },
+      {
+        username: "BaitWhistle",
+        content: "Our neighborhoods aren't safe anymore...",
+        type: "dogwhistle",
+      },
+      {
+        username: "GiveawayBot",
+        content: "WIN $1000 Amazon gift card!",
+        type: "bot",
+      },
     ];
 
     this.dialogue = [
@@ -159,8 +228,34 @@ class CommentSectionChaos extends Phaser.Scene {
   create() {
     this.dialogueIndex = 0;
     this.selectedFlag = null;
-    this.activeComments = [];
     this.progressValue = 0;
+
+    // Set background color
+    this.cameras.main.setBackgroundColor("#1e1e1e");
+
+    // Create mask area
+    this.panelMaskShape = this.add.graphics();
+    this.panelMaskShape.fillStyle(0x1e1e1e);
+    this.panelMaskShape.fillRect(100, 190, 500, 360); // (x, y, width, height)
+
+    const mask = new Phaser.Display.Masks.GeometryMask(
+      this,
+      this.panelMaskShape
+    );
+
+    // Create a container for comments
+    this.commentPanel = this.add.container(100, 190); // Notice (100, 190) to align with mask
+    this.commentPanel.setMask(mask);
+
+    this.scrollOffset = 0;
+
+    this.input.on("wheel", (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+      this.scrollOffset -= deltaY * 0.5; // Adjust scroll speed
+      this.scrollOffset = Phaser.Math.Clamp(this.scrollOffset, -1000, 0); // Limit scrolling
+      this.commentPanel.y = 190 + this.scrollOffset; // IMPORTANT: base y + scroll
+    });
+
+    this.activeComments = [];
 
     this.createIntro();
   }
@@ -276,7 +371,7 @@ class CommentSectionChaos extends Phaser.Scene {
   }
 
   spawnInitialComments() {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 10; i++) {
       this.spawnRandomComment();
     }
   }
@@ -286,22 +381,22 @@ class CommentSectionChaos extends Phaser.Scene {
 
     const index = Phaser.Math.Between(0, this.commentPool.length - 1);
     const data = this.commentPool.splice(index, 1)[0];
-    const y = 200 + this.activeComments.length * 70;
+    const y = this.activeComments.length * 70;
 
     const container = this.add.container(0, y);
 
-    const username = this.add.text(100, 0, data.username, {
+    const username = this.add.text(10, 0, data.username, {
       fontSize: "16px",
       color: "#00bfff",
       fontFamily: "Arial",
       fontStyle: "bold",
     });
 
-    const content = this.add.text(120, 20, data.content, {
+    const content = this.add.text(30, 20, data.content, {
       fontSize: "14px",
       color: "#ffffff",
       fontFamily: "Arial",
-      wordWrap: { width: 550 },
+      wordWrap: { width: 500 },
     });
 
     content.commentType = data.type;
@@ -313,6 +408,7 @@ class CommentSectionChaos extends Phaser.Scene {
     content.setInteractive();
     content.on("pointerdown", () => this.onCommentClicked(container));
 
+    this.commentPanel.add(container);
     this.activeComments.push(container);
   }
 
@@ -333,27 +429,28 @@ class CommentSectionChaos extends Phaser.Scene {
       alpha: 0,
       duration: 300,
       onComplete: () => {
+        const removedY = container.y;
+
         container.destroy();
         this.activeComments = this.activeComments.filter((c) => c.active);
-        this.rearrangeComments();
-        if (this.activeComments.length < 4) {
+
+        this.activeComments.forEach((c) => {
+          if (c.y > removedY) {
+            this.tweens.add({
+              targets: c,
+              y: c.y - 70,
+              duration: 200,
+            });
+          }
+        });
+
+        if (this.activeComments.length < 10) {
           this.spawnRandomComment();
         }
       },
     });
 
     this.updateProgress(progressChange);
-  }
-
-  rearrangeComments() {
-    this.activeComments.forEach((c, index) => {
-      this.tweens.add({
-        targets: c,
-        y: 200 + index * 70,
-        duration: 300,
-        ease: "Power2",
-      });
-    });
   }
 
   updateProgress(amount) {
