@@ -6,14 +6,9 @@ class MainMenu extends Phaser.Scene {
     super({ key: "MainMenu" });
   }
 
-  preload() {
-    // Load assets here if needed
-  }
-
   create() {
     this.cameras.main.setBackgroundColor("#24252A");
 
-    // Title
     this.add
       .text(400, 150, "Operation Red Flag", {
         fontSize: "48px",
@@ -22,7 +17,6 @@ class MainMenu extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    // Start Mission Button
     const startButton = this.add
       .text(400, 300, "Start Mission", {
         fontSize: "32px",
@@ -35,11 +29,8 @@ class MainMenu extends Phaser.Scene {
       .setInteractive()
       .on("pointerover", () => startButton.setStyle({ fill: "#ffff00" }))
       .on("pointerout", () => startButton.setStyle({ fill: "#00ff00" }))
-      .on("pointerdown", () => {
-        this.scene.start("CommentSectionChaos");
-      });
+      .on("pointerdown", () => this.scene.start("CommentSectionChaos"));
 
-    // Instructions Button
     const instructionsButton = this.add
       .text(400, 400, "Instructions", {
         fontSize: "24px",
@@ -50,67 +41,9 @@ class MainMenu extends Phaser.Scene {
       .setInteractive()
       .on("pointerover", () => instructionsButton.setStyle({ fill: "#ffff00" }))
       .on("pointerout", () => instructionsButton.setStyle({ fill: "#ffffff" }))
-      .on("pointerdown", () => {
-        alert("Find the villain. Stay sharp. Think critically.");
-      });
-  }
-}
-
-// ==================
-// Comment Classes
-// ==================
-
-// Base Comment Class
-class Comment extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, username, content, type) {
-    super(scene, x, y);
-
-    this.username = username;
-    this.content = content;
-    this.type = type; // "normal", "troll", "bot", "dogwhistle"
-    this.selected = false;
-
-    this.bg = scene.add
-      .rectangle(0, 0, 700, 60, 0xffffff)
-      .setStrokeStyle(2, 0x000000);
-
-    this.usernameText = scene.add.text(-330, -20, username, {
-      fontSize: "16px",
-      color: "#333333",
-    });
-
-    this.contentText = scene.add.text(-330, 0, content, {
-      fontSize: "14px",
-      color: "#000000",
-      wordWrap: { width: 650 },
-    });
-
-    this.add([this.bg, this.usernameText, this.contentText]);
-    this.setSize(700, 60);
-
-    scene.add.existing(this);
-  }
-}
-
-// Subclasses for different types
-class TrollComment extends Comment {
-  constructor(scene, x, y, username, content) {
-    super(scene, x, y, username, content, "troll");
-  }
-}
-class BotComment extends Comment {
-  constructor(scene, x, y, username, content) {
-    super(scene, x, y, username, content, "bot");
-  }
-}
-class DogWhistleComment extends Comment {
-  constructor(scene, x, y, username, content) {
-    super(scene, x, y, username, content, "dogwhistle");
-  }
-}
-class NormalComment extends Comment {
-  constructor(scene, x, y, username, content) {
-    super(scene, x, y, username, content, "normal");
+      .on("pointerdown", () =>
+        alert("Find the villain. Stay sharp. Think critically.")
+      );
   }
 }
 
@@ -154,37 +87,13 @@ class CommentSectionChaos extends Phaser.Scene {
         type: "normal",
       },
     ];
-  }
-
-  preload() {
-    // Later: Load assets
-  }
-
-  selectFlag(flagType) {
-    this.selectedFlag = flagType;
-    console.log("Selected flag:", flagType);
-
-    // Optionally: highlight the selected flag
-    this.trollFlag.setBackgroundColor("#333333");
-    this.botFlag.setBackgroundColor("#333333");
-    this.dogWhistleFlag.setBackgroundColor("#333333");
-
-    if (flagType === "troll") {
-      this.trollFlag.setBackgroundColor("#5555ff"); // Highlight
-    } else if (flagType === "bot") {
-      this.botFlag.setBackgroundColor("#5555ff");
-    } else if (flagType === "dogwhistle") {
-      this.dogWhistleFlag.setBackgroundColor("#5555ff");
-    }
+    this.selectedFlag = null;
   }
 
   create() {
     this.cameras.main.setBackgroundColor("#1e1e1e");
 
-    // Detective rectangle
     this.detective = this.add.rectangle(100, 500, 80, 120, 0x0077ff);
-
-    // Dialogue box
     this.dialogueBox = this.add.rectangle(400, 550, 700, 80, 0x333333);
     this.dialogueText = this.add.text(
       120,
@@ -197,10 +106,7 @@ class CommentSectionChaos extends Phaser.Scene {
       }
     );
 
-    // Clicking advances dialogue
-    this.input.on("pointerdown", () => {
-      this.advanceDialogue();
-    });
+    this.input.on("pointerdown", () => this.advanceDialogue());
   }
 
   advanceDialogue() {
@@ -213,20 +119,23 @@ class CommentSectionChaos extends Phaser.Scene {
   }
 
   startGameplay() {
-    // Hide detective intro
+    this.detective.destroy();
     this.dialogueBox.destroy();
     this.dialogueText.destroy();
-    this.detective.destroy();
-
-    // Placeholder: starting gameplay
     this.setupGameUI();
   }
 
   setupGameUI() {
-    // Progress Bar Placeholder (for later)
-    this.progressBar = this.add.rectangle(400, 20, 600, 20, 0x00ff00);
+    // Progress bar
+    this.progressValue = 300; // 50% start
+    this.progressBar = this.add.rectangle(
+      400,
+      20,
+      this.progressValue,
+      20,
+      0x00ff00
+    );
 
-    // Title of the Post (centered)
     this.add
       .text(400, 60, "🚨 Breaking News 🚨", {
         fontSize: "24px",
@@ -235,7 +144,6 @@ class CommentSectionChaos extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    // Placeholder Post Content
     this.add
       .text(400, 100, "An important event has everyone talking...", {
         fontSize: "16px",
@@ -244,22 +152,15 @@ class CommentSectionChaos extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    // Comment Section Title
-    this.add
-      .text(100, 150, "Comments:", {
-        fontSize: "20px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-      })
-      .setOrigin(0, 0);
+    this.add.text(100, 150, "Comments:", {
+      fontSize: "20px",
+      color: "#ffffff",
+      fontFamily: "Arial",
+    });
 
-    // Group to hold all comments
     this.commentsGroup = this.add.group();
+    let commentY = 180;
 
-    // Vertical spacing
-    let commentY = 180; // Start position under the "Comments:" title
-
-    // Loop through comment data and spawn comments
     this.commentData.forEach((comment) => {
       const usernameText = this.add.text(100, commentY, comment.username, {
         fontSize: "16px",
@@ -268,73 +169,126 @@ class CommentSectionChaos extends Phaser.Scene {
         fontStyle: "bold",
       });
 
-      const contentText = this.add.text(120, commentY + 20, comment.content, {
-        fontSize: "14px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        wordWrap: { width: 550 },
+      const contentText = this.add
+        .text(120, commentY + 20, comment.content, {
+          fontSize: "14px",
+          color: "#ffffff",
+          fontFamily: "Arial",
+          wordWrap: { width: 550 },
+        })
+        .setInteractive();
+
+      contentText.commentType = comment.type;
+      contentText.marked = false;
+
+      contentText.on("pointerdown", () => {
+        this.handleCommentClick(contentText);
       });
 
       this.commentsGroup.add(usernameText);
       this.commentsGroup.add(contentText);
 
-      // Increase Y for next comment
-      commentY += 70; // Space out the comments nicely
-
-      // Red Flags UI
-      this.selectedFlag = null; // Track what the player has selected
-
-      this.add.text(620, 150, "Red Flags:", {
-        fontSize: "20px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-      });
-
-      // Troll Flag
-      this.trollFlag = this.add
-        .text(620, 190, "👺 Troll", {
-          fontSize: "18px",
-          color: "#ff4444",
-          fontFamily: "Arial",
-          backgroundColor: "#333333",
-          padding: { x: 5, y: 3 },
-        })
-        .setInteractive();
-
-      this.trollFlag.on("pointerdown", () => {
-        this.selectFlag("troll");
-      });
-
-      // Bot Flag
-      this.botFlag = this.add
-        .text(620, 240, "🤖 Bot", {
-          fontSize: "18px",
-          color: "#44ff44",
-          fontFamily: "Arial",
-          backgroundColor: "#333333",
-          padding: { x: 5, y: 3 },
-        })
-        .setInteractive();
-
-      this.botFlag.on("pointerdown", () => {
-        this.selectFlag("bot");
-      });
-
-      // Dog Whistle Flag
-      this.dogWhistleFlag = this.add
-        .text(620, 290, "🐶 Dog Whistle", {
-          fontSize: "18px",
-          color: "#ffff44",
-          fontFamily: "Arial",
-          backgroundColor: "#333333",
-          padding: { x: 5, y: 3 },
-        })
-        .setInteractive();
-
-      this.dogWhistleFlag.on("pointerdown", () => {
-        this.selectFlag("dogwhistle");
-      });
+      commentY += 70;
     });
+
+    // Red Flags UI (only ONCE)
+    this.add.text(620, 150, "Red Flags:", {
+      fontSize: "20px",
+      color: "#ffffff",
+      fontFamily: "Arial",
+    });
+
+    this.trollFlag = this.createFlag(620, 190, "👺 Troll", "troll", "#ff4444");
+    this.botFlag = this.createFlag(620, 240, "🤖 Bot", "bot", "#44ff44");
+    this.dogWhistleFlag = this.createFlag(
+      620,
+      290,
+      "🐶 Dog Whistle",
+      "dogwhistle",
+      "#ffff44"
+    );
+  }
+
+  createFlag(x, y, label, type, color) {
+    const flag = this.add
+      .text(x, y, label, {
+        fontSize: "18px",
+        color: color,
+        fontFamily: "Arial",
+        backgroundColor: "#333333",
+        padding: { x: 5, y: 3 },
+      })
+      .setInteractive();
+
+    flag.on("pointerdown", () => {
+      this.selectFlag(type);
+    });
+
+    return flag;
+  }
+
+  selectFlag(flagType) {
+    this.selectedFlag = flagType;
+    console.log("Selected flag:", flagType);
+
+    this.trollFlag.setBackgroundColor("#333333");
+    this.botFlag.setBackgroundColor("#333333");
+    this.dogWhistleFlag.setBackgroundColor("#333333");
+
+    if (flagType === "troll") {
+      this.trollFlag.setBackgroundColor("#5555ff");
+    } else if (flagType === "bot") {
+      this.botFlag.setBackgroundColor("#5555ff");
+    } else if (flagType === "dogwhistle") {
+      this.dogWhistleFlag.setBackgroundColor("#5555ff");
+    }
+  }
+
+  handleCommentClick(contentText) {
+    if (!this.selectedFlag || contentText.marked) {
+      return;
+    }
+
+    contentText.marked = true;
+
+    if (this.selectedFlag === contentText.commentType) {
+      this.updateProgress(10);
+      this.flashComment(contentText, 0x00ff00);
+    } else {
+      this.updateProgress(-5);
+      this.flashComment(contentText, 0xff0000);
+    }
+  }
+
+  flashComment(commentText, color) {
+    const originalBgColor = commentText.backgroundColor;
+
+    commentText.setStyle({
+      backgroundColor: Phaser.Display.Color.ValueToColor(color).rgba,
+      color: "#ffffff", // Text stays white
+    });
+
+    this.time.delayedCall(200, () => {
+      commentText.setStyle({
+        backgroundColor: null,
+        color: "#ffffff",
+      });
+      commentText.destroy(); // << Also destroy after flash (makes it disappear)
+    });
+  }
+
+  updateProgress(amount) {
+    this.progressValue += amount * 3;
+    this.progressValue = Phaser.Math.Clamp(this.progressValue, 0, 600);
+    this.progressBar.width = this.progressValue;
+
+    if (this.progressValue >= 600) {
+      alert("Mission Complete! Comment Section Saved!");
+      this.scene.restart();
+    } else if (this.progressValue <= 0) {
+      alert("Mission Failed! The villain won this round!");
+      this.scene.restart();
+    }
   }
 }
 
