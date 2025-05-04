@@ -6,6 +6,10 @@ class MainMenu extends Phaser.Scene {
     super({ key: "MainMenu" });
   }
 
+  preload() {
+    this.load.font("PixelFont", "assets/pixelfont.otf");
+  }
+
   create() {
     this.cameras.main.setBackgroundColor("#24252A");
 
@@ -14,7 +18,7 @@ class MainMenu extends Phaser.Scene {
       .text(400, 150, "Operation Red Flag", {
         fontSize: "48px",
         color: "#ffffff",
-        fontFamily: "Arial",
+        fontFamily: "PixelFont",
       })
       .setOrigin(0.5);
 
@@ -25,7 +29,7 @@ class MainMenu extends Phaser.Scene {
         color: "#00ff00",
         backgroundColor: "#000000",
         padding: { x: 10, y: 5 },
-        fontFamily: "Arial",
+        fontFamily: "PixelFont",
       })
       .setOrigin(0.5)
       .setInteractive();
@@ -40,7 +44,7 @@ class MainMenu extends Phaser.Scene {
       .text(400, 400, "Instructions", {
         fontSize: "24px",
         color: "#ffffff",
-        fontFamily: "Arial",
+        fontFamily: "PixelFont",
       })
       .setOrigin(0.5)
       .setInteractive();
@@ -63,172 +67,216 @@ class CommentSectionChaos extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image("detective", "assets/detective.png");
+    this.load.font("PixelFont", "assets/pixelfont.otf");
     // Comment Pool: Expanded to ~30 comments
     this.commentPool = [
       {
-        username: "PatriotEagle99",
+        username: "JREGULARGUY",
         content:
-          "Why even bother listening to them? They're all corrupt anyway.",
+          "Lmao this guy still believes in the “experts”? 😂 Imagine being this naive.",
         type: "troll",
       },
       {
-        username: "FreedomBot2025",
+        username: "xyz123_12",
         content:
-          "Amazing! Check out this new political page! 👉 [suspicious link]",
+          "Incredible perspective! I just earned $3,000 this week investing in crypto — learn more here 👉 fortnitegiftcard.com",
         type: "bot",
       },
       {
-        username: "LibertyCrier",
+        username: "seethi",
         content:
-          "Some people just don't value 'traditional values' anymore... sad.",
+          "Funny how minorities keep pushing for 'more democracy' while ruining everything.",
         type: "dogwhistle",
+      },
+      {
+        username: "GeorgeJ",
+        content:
+          "Really thoughtful video. It’s important we keep having these conversations even when it’s uncomfortable.",
+        type: "normal",
       },
       {
         username: "SunnyDays",
-        content: "Hope everyone is staying safe and kind out there! ❤️",
-        type: "normal",
-      },
-      {
-        username: "RealNews123",
-        content: "Everyone is panicking without knowing all the facts!",
+        content: "Cool story bro. Now do one on why nobody cares anymore.",
         type: "troll",
       },
       {
-        username: "BotBlaster",
-        content: "Win a free trip! Click here! 🌴",
+        username: "christ_the_savior",
+        content:
+          "Such an important video! Btw if you want financial freedom during these hard times, click here -> cryptowallet789.net",
         type: "bot",
       },
       {
-        username: "WhistleGuy",
-        content: "People like *them* are ruining our culture...",
+        username: "JeggyWeggs",
+        content:
+          "Back when certain people weren’t allowed to vote, things seemed... a little more stable. 🤔",
         type: "dogwhistle",
       },
       {
-        username: "KindSoul",
-        content: "Remember: empathy > anger. ❤️",
+        username: "ethanz",
+        content:
+          "You made some great points about media consolidation and voter suppression — well researched!",
         type: "normal",
       },
       {
-        username: "TruthSeeker",
-        content: "Don't believe everything you read! Question it all!",
+        username: "I_Love_Star_Wars",
+        content: "Imagine thinking voting changes anything... 🤡",
         type: "troll",
       },
       {
-        username: "TravelBotX",
-        content: "Unbelievable deals! Book now!! ✈️",
+        username: "mdaniels57",
+        content: "Subscribed! Also check my channel for AMAZING deals 🤑",
         type: "bot",
       },
       {
-        username: "SubtleSignal",
-        content: "Some groups just don't fit into our way of life...",
+        username: "Lion Of The World",
+        content:
+          "We need real Americans standing up again before it's too late.",
         type: "dogwhistle",
       },
       {
-        username: "FriendlyNeighbor",
-        content: "Stay positive, friends! 🌻",
+        username: "TheVikJ",
+        content:
+          "Even if I don't agree with everything here, I appreciate the respectful tone. Subscribed!",
         type: "normal",
       },
       {
-        username: "ConspiracyHunter",
-        content: "Wake up sheeple!! The truth is hidden!",
+        username: "LodedDiper1776",
+        content: "This channel fell off lol.",
         type: "troll",
       },
       {
-        username: "PromoBot",
-        content: "Limited time offer! Don't miss out!",
+        username: "jeff_seven927",
+        content:
+          "2025 is wild! I'm staying safe by boosting my health with THIS amazing product detoxfootpads.org",
         type: "bot",
       },
       {
-        username: "CodeWhistler",
-        content: "Certain people just can’t be trusted with important roles.",
+        username: "joyful heart",
+        content:
+          "Remember when merit actually mattered instead of ticking boxes?",
         type: "dogwhistle",
       },
       {
-        username: "JoyfulHeart",
-        content: "Sending love and kindness to all! ❤️",
+        username: "collier_davis",
+        content:
+          "Glad to see creators tackling serious topics without just yelling at each other.",
         type: "normal",
       },
       {
-        username: "JusticeWatch",
-        content: "They're trying to silence us!",
+        username: "wolverine28",
+        content: "Bro you don’t understand anything. FAKE NEWS.",
         type: "troll",
       },
       {
-        username: "SpammySam",
-        content: "FREE gift cards! Comment NOW!",
+        username: "samuel gardner",
+        content:
+          "The government can't control you if you're financially free! Learn how I did it andreewbelmar.com",
         type: "bot",
       },
       {
-        username: "SignalCaller",
-        content: "They aren't *real* citizens anyway...",
+        username: "goofy doof",
+        content:
+          "The founding fathers knew what was coming. Stay vigilant, Patriots. 🐍",
         type: "dogwhistle",
       },
       {
-        username: "PeaceBringer",
-        content: "Let's build bridges, not walls. ✨",
+        username: "chloe_morgado",
+        content:
+          "Important reminder that democracy is a living system — it needs active care, not blind faith.",
         type: "normal",
       },
       {
-        username: "AngryVoice",
-        content: "They don't deserve rights.",
+        username: "art_lover22",
+        content: "This piece has such a powerful atmosphere—love the lighting!",
+        type: "normal",
+      },
+      {
+        username: "dev_guy42",
+        content:
+          "This is a solid start, but the pacing feels a little rushed in the middle.",
+        type: "normal",
+      },
+      {
+        username: "viewer101",
+        content: "I watched this all the way through.",
+        type: "normal",
+      },
+      {
+        username: "GenerelCnowledge",
+        content:
+          "Funny how those people keep ‘expanding democracy’ but somehow everything keeps getting worse.",
         type: "dogwhistle",
       },
       {
-        username: "SuperSaleBot",
-        content: "50% off luxury watches! ⌚",
+        username: "ninja man",
+        content:
+          "Can't believe people still think everyone’s vote should count the same. Do your research.",
+        type: "dogwhistle",
+      },
+      {
+        username: "quiet_kid",
+        content:
+          "There was a time when only those who truly contributed had a say. We’ve lost our way.",
+        type: "dogwhistle",
+      },
+      {
+        username: "CryptoQueen44",
+        content:
+          "Voting won’t fix your finances, but passive income might! Check out my page for tips 💎",
         type: "bot",
       },
       {
-        username: "HopeDealer",
-        content: "Kindness is contagious. ❤️",
-        type: "normal",
+        username: "wealthwizard2025",
+        content:
+          "Feeling powerless this election? Start earning from home instead 👉 lifechangerzapp.net",
+        type: "bot",
       },
       {
-        username: "AltNewsNow",
-        content: "You won't hear THIS on the mainstream news!",
+        username: "investguru3000",
+        content:
+          "While everyone argues about politics, I’m quietly making $5k/week. Learn how -> secureyourfuture.me",
+        type: "bot",
+      },
+      {
+        username: "hopeful_dodger",
+        content: "Keep voting if you want, nothing's ever gonna change. 😂",
         type: "troll",
       },
       {
-        username: "CouponKing",
-        content: "Get your discounts today! 🎟️",
-        type: "bot",
-      },
-      {
-        username: "HiddenAgenda",
-        content: "The government is hiding everything from us!",
+        username: "pokerjack9000",
+        content:
+          "Ah yes, another ‘we can change the system’ video. Good luck with that.",
         type: "troll",
       },
       {
-        username: "BridgeBuilder",
-        content: "Together we are stronger. 🤝",
-        type: "normal",
-      },
-      {
-        username: "BaitWhistle",
-        content: "Our neighborhoods aren't safe anymore...",
-        type: "dogwhistle",
-      },
-      {
-        username: "GiveawayBot",
-        content: "WIN $1000 Amazon gift card!",
-        type: "bot",
+        username: "MegaLulz",
+        content:
+          "Imagine thinking politicians care about your vote. Clown world 🤡",
+        type: "troll",
       },
     ];
 
     this.dialogue = [
-      "Detective: The villain is infecting this comment section!",
-      "Detective: They use trolls to provoke, bots to amplify, and dog whistles to radicalize.",
+      "Detective: Good morning, kid, we already got a new tip.",
+      "Detective: It's a break in the Milly Infaux case...",
+      "Detective: I've been on her tail for a long time,",
+      "Detective: I hope it finally pays off.",
+      "Detective: Apparently, Ms. Infaux has been infecting a YouTube Comment Section.",
+      "Detective: She's using troll accounts to write inflammatory off-topic comments about the video.",
+      "Detective: She's also using bot accounts to drop links to further her causes.",
+      "Detective: And she's using dog whistle accounts to divide people up and spread bigotry.",
       "Detective: Identify trolls, bots, and dog whistles with the red flags.",
-      "Detective: Correctly tagging them helps us hack their machine!",
+      "Detective: Correctly tagging them helps us hack her machine!",
       "Detective: Misidentifying good commenters will set us back. Be careful!",
-      "Detective: Good luck, agent.",
+      "Detective: Good luck, agent. I'm gonna get my second cup of coffee.",
     ];
   }
 
   create() {
     this.dialogueIndex = 0;
     this.selectedFlag = null;
-    this.progressValue = 0;
+    this.progressValue = 20;
 
     // Set background color
     this.cameras.main.setBackgroundColor("#1e1e1e");
@@ -262,8 +310,16 @@ class CommentSectionChaos extends Phaser.Scene {
 
   createIntro() {
     this.cameras.main.setBackgroundColor("#1e1e1e");
+    this.detective = this.add.sprite(-100, 300, "detective");
+    this.detective.setScale(0.2);
 
-    this.detective = this.add.rectangle(100, 500, 80, 120, 0x0077ff);
+    this.tweens.add({
+      targets: this.detective,
+      x: 400,
+      duration: 1000,
+      ease: "Power2",
+    });
+
     this.dialogueBox = this.add.rectangle(400, 550, 700, 80, 0x333333);
     this.dialogueText = this.add.text(
       120,
@@ -271,6 +327,7 @@ class CommentSectionChaos extends Phaser.Scene {
       this.dialogue[this.dialogueIndex],
       {
         fontSize: "20px",
+        fontFamily: "PixelFont",
         color: "#ffffff",
         wordWrap: { width: 600 },
       }
@@ -284,7 +341,13 @@ class CommentSectionChaos extends Phaser.Scene {
     if (this.dialogueIndex < this.dialogue.length) {
       this.dialogueText.setText(this.dialogue[this.dialogueIndex]);
     } else {
-      this.startGame();
+      this.tweens.add({
+        targets: this.detective,
+        x: 900,
+        duration: 1000,
+        ease: "Power2",
+        onComplete: () => this.startGame(),
+      });
     }
   }
 
@@ -306,31 +369,30 @@ class CommentSectionChaos extends Phaser.Scene {
     this.progressBarFill.scaleX = 0.15;
 
     this.add
-      .text(400, 60, "🚨 Breaking News 🚨", {
-        fontSize: "24px",
+      .text(400, 60, "voting... (a video essay)", {
+        font: "400 24px PixelFont",
         color: "#ffffff",
-        fontFamily: "Arial",
       })
       .setOrigin(0.5);
 
     this.add
-      .text(400, 100, "An important event has everyone talking...", {
+      .text(400, 100, "Joey Schmoey", {
         fontSize: "16px",
         color: "#cccccc",
-        fontFamily: "Arial",
+        fontFamily: "PixelFont",
       })
-      .setOrigin(0.5);
+      .setOrigin(1.55);
 
     this.add.text(100, 150, "Comments:", {
       fontSize: "20px",
       color: "#ffffff",
-      fontFamily: "Arial",
+      fontFamily: "PixelFont",
     });
 
     this.add.text(620, 150, "Red Flags:", {
       fontSize: "20px",
       color: "#ffffff",
-      fontFamily: "Arial",
+      fontFamily: "PixelFont",
     });
 
     this.trollFlag = this.createFlag(620, 190, "👺 Troll", "troll", "#ff4444");
@@ -381,22 +443,22 @@ class CommentSectionChaos extends Phaser.Scene {
 
     const index = Phaser.Math.Between(0, this.commentPool.length - 1);
     const data = this.commentPool.splice(index, 1)[0];
-    const y = this.activeComments.length * 70;
+    const y = this.activeComments.length * 100;
 
     const container = this.add.container(0, y);
 
     const username = this.add.text(10, 0, data.username, {
       fontSize: "16px",
       color: "#00bfff",
-      fontFamily: "Arial",
+      fontFamily: "PixelFont",
       fontStyle: "bold",
     });
 
     const content = this.add.text(30, 20, data.content, {
-      fontSize: "14px",
+      fontSize: "16px",
       color: "#ffffff",
-      fontFamily: "Arial",
-      wordWrap: { width: 500 },
+      fontFamily: "PixelFont",
+      wordWrap: { width: 450 },
     });
 
     content.commentType = data.type;
@@ -438,7 +500,7 @@ class CommentSectionChaos extends Phaser.Scene {
           if (c.y > removedY) {
             this.tweens.add({
               targets: c,
-              y: c.y - 70,
+              y: c.y - 100,
               duration: 200,
             });
           }
